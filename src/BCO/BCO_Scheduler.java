@@ -1,11 +1,7 @@
-package PSO;
-
+package BCO;
 
 import org.cloudbus.cloudsim.*;
 import org.cloudbus.cloudsim.core.CloudSim;
-import org.cloudbus.cloudsim.provisioners.BwProvisionerSimple;
-import org.cloudbus.cloudsim.provisioners.PeProvisionerSimple;
-import org.cloudbus.cloudsim.provisioners.RamProvisionerSimple;
 import utils.Constants;
 import utils.DatacenterCreator;
 import utils.GenerateMatrices;
@@ -13,12 +9,12 @@ import utils.GenerateMatrices;
 import java.text.DecimalFormat;
 import java.util.*;
 
-public class PSO_Scheduler {
+public class BCO_Scheduler {
 
     private static List<Cloudlet> cloudletList;
     private static List<Vm> vmList;
     private static Datacenter[] datacenter;
-    private static PSO PSOSchedularInstance;
+    private static BCO BCOSchedularInstance;
     private static double mapping[];
     private static double[][] commMatrix;
     private static double[][] execMatrix;
@@ -74,8 +70,8 @@ public class PSO_Scheduler {
         new GenerateMatrices();
         commMatrix = GenerateMatrices.getCommMatrix();
         execMatrix = GenerateMatrices.getExecMatrix();
-        PSOSchedularInstance = new PSO();
-        mapping = PSOSchedularInstance.run();
+        BCOSchedularInstance = new BCO();
+        mapping = BCOSchedularInstance.run();
 
         try {
             int num_user = 1;   // number of grid users
@@ -91,7 +87,7 @@ public class PSO_Scheduler {
             }
 
             //Third step: Create Broker
-            PSODatacenterBroker broker = createBroker("Broker_0");
+            BCODatacenterBroker broker = createBroker("Broker_0");
             int brokerId = broker.getId();
 
             //Fourth step: Create VMs and Cloudlets and send them to broker
@@ -127,15 +123,15 @@ public class PSO_Scheduler {
 
             printCloudletList(newList);
 
-            Log.printLine(PSO_Scheduler.class.getName() + " finished!");
+            Log.printLine(BCO_Scheduler.class.getName() + " finished!");
         } catch (Exception e) {
             e.printStackTrace();
             Log.printLine("The simulation has been terminated due to an error");
         }
     }
 
-    private static PSODatacenterBroker createBroker(String name) throws Exception {
-        return new PSODatacenterBroker(name);
+    private static BCODatacenterBroker createBroker(String name) throws Exception {
+        return new BCODatacenterBroker(name);
     }
 
     /**
@@ -175,6 +171,6 @@ public class PSO_Scheduler {
             mxFinishTime = Math.max(mxFinishTime, cloudlet.getFinishTime());
         }
         Log.printLine(mxFinishTime);
-        PSOSchedularInstance.printBestFitness();
+        BCOSchedularInstance.printBestFitness();
     }
 }

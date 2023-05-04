@@ -11,10 +11,15 @@ import java.util.List;
 
 public class SJFDatacenterBroker extends DatacenterBroker {
 
+    //Constructor method that takes a string name and passes it to the superclass constructor to initialize the name of the broker.
     SJFDatacenterBroker(String name) throws Exception {
         super(name);
     }
-
+    //Method that binds cloudlets to VMs based on the shortest job first scheduling algorithm.
+    // It first calculates the number of required tasks and VMs and selects the first VM in the VM list.
+    // Then, it iterates through the cloudlet list, binding each cloudlet to a VM and outputting a message to the console indicating the task and VM it is bound to.
+    // After that, it sorts the received cloudlet list in ascending order of task length divided by the product of the VM's MIPS (Million Instructions Per Second) and number of PEs (Processing Elements) using a simple bubble sort algorithm.
+    // Finally, it sets the sorted list as the received cloudlet list for the broker.
     public void scheduleTaskstoVms() {
         int reqTasks = cloudletList.size();
         int reqVms = vmList.size();
@@ -83,6 +88,9 @@ public class SJFDatacenterBroker extends DatacenterBroker {
         System.out.println();
     }
 
+    //Method that processes a cloudlet returned by a VM.
+    // It adds the cloudlet to the received cloudlet list, outputs a message to the console indicating the ID of the received cloudlet, and decrements the cloudletsSubmitted variable.
+    // If there are no more cloudlets to submit and all previously submitted cloudlets have finished executing, it calls the scheduleTaskstoVms() method to bind the remaining received cloudlets to VMs and execute them.
     @Override
     protected void processCloudletReturn(SimEvent ev) {
         Cloudlet cloudlet = (Cloudlet) ev.getData();
@@ -96,6 +104,10 @@ public class SJFDatacenterBroker extends DatacenterBroker {
         }
     }
 
+    // Method that handles the execution of a cloudlet.
+    // If there are no more cloudlets to execute, it clears the datacenters, finishes execution, and outputs a message to the console indicating that all cloudlets have been executed.
+    // Otherwise, if there are still cloudlets to execute but none have been submitted yet, it clears the datacenters and creates new VMs.
+    // This is to ensure that each cloudlet has a VM to execute on.
     protected void cloudletExecution(Cloudlet cloudlet) {
 
         if (getCloudletList().size() == 0 && cloudletsSubmitted == 0) { // all cloudlets executed
@@ -112,6 +124,9 @@ public class SJFDatacenterBroker extends DatacenterBroker {
         }
     }
 
+    //Method that processes the resource characteristics of a datacenter.
+    // It adds the characteristics to the datacenter characteristics list and,
+    // if the number of characteristics in the list equals the number of datacenter IDs in the broker's list, it calls the distributeRequestsForNewVmsAcrossDatacenters() method to distribute VM creation requests across the available datacenters.
     @Override
     protected void processResourceCharacteristics(SimEvent ev) {
         DatacenterCharacteristics characteristics = (DatacenterCharacteristics) ev.getData();
@@ -122,6 +137,10 @@ public class SJFDatacenterBroker extends DatacenterBroker {
         }
     }
 
+
+    //Method that distributes requests for creating new VMs across the available datacenters.
+    //It iterates through the VM list, selects a datacenter to create the VM in, sends a message to the datacenter to create the VM,
+    // and outputs a message to the console indicating the ID of the VM and the datacenter it will be created in.
     protected void distributeRequestsForNewVmsAcrossDatacenters() {
         int numberOfVmsAllocated = 0;
         int i = 0;
