@@ -1,12 +1,11 @@
 package BCO;
 
-import java.util.Random;
-
 import JSwarmBCO.Bee;
 import utils.Constants;
 
-public class SchedulerBee extends Bee {
+import java.util.Random;
 
+public class SchedulerBee extends Bee {
     public SchedulerBee() {
         super(Constants.NO_OF_TASKS);
         double[] position = new double[Constants.NO_OF_TASKS];
@@ -17,6 +16,35 @@ public class SchedulerBee extends Bee {
         }
         setPosition(position);
     }
+
+    @Override
+    public double[] performRandomSearch(double minPosition, double maxPosition) {
+        // clone the current position
+        double[] newPosition = getPosition().clone();
+        // select a random dimension
+        int randomDimension = (int) (Math.random() * getPosition().length);
+        // apply a small random perturbation to the selected dimension
+        double perturbation = (Math.random() - 0.5) * Constants.PERTURBATION_RANGE;
+        newPosition[randomDimension] += perturbation;
+        // make sure the new position is within the search space boundaries
+        newPosition[randomDimension] = Math.max(newPosition[randomDimension], minPosition);
+        newPosition[randomDimension] = Math.min(newPosition[randomDimension], maxPosition);
+        return newPosition;
+    }
+    @Override
+    public double[] exploreNeighborhood(double minPosition, double maxPosition) {
+        double[] newPosition = new double[getPosition().length];
+        for (int i = 0; i < newPosition.length; i++) {
+            // generate a random position in the search space
+            newPosition[i] = minPosition + Math.random() * (maxPosition - minPosition);
+        }
+        // Set the position to the new position
+        setPosition(newPosition);
+        // reset the fitness
+        fitness = -1;
+        return newPosition;
+    }
+
 
     @Override
     public String toString() {
@@ -30,11 +58,11 @@ public class SchedulerBee extends Bee {
                     ++no_of_tasks;
                 }
             }
-            if (tasks.isEmpty()) output += "There is no tasks associated to Data Center " + i + "\n";
+            if (tasks.isEmpty())
+                output += "There is no task associated to Data Center " + i + "\n";
             else
                 output += "There are " + no_of_tasks + " tasks associated to Data Center " + i + " and they are " + tasks + "\n";
         }
         return output;
     }
-
 }

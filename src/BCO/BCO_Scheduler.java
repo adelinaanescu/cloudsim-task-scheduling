@@ -14,7 +14,7 @@ public class BCO_Scheduler {
     private static List<Cloudlet> cloudletList;
     private static List<Vm> vmList;
     private static Datacenter[] datacenter;
-    private static BCO BCOSchedularInstance;
+    private static BCO BCOSchedulerInstance;
     private static double mapping[];
     private static double[][] commMatrix;
     private static double[][] execMatrix;
@@ -65,15 +65,16 @@ public class BCO_Scheduler {
     }
 
     public static void main(String[] args) {
-        Log.printLine("Starting PSO Scheduler...");
+        Log.printLine("Starting BCO Scheduler...");
 
         new GenerateMatrices();
         commMatrix = GenerateMatrices.getCommMatrix();
         execMatrix = GenerateMatrices.getExecMatrix();
-        BCOSchedularInstance = new BCO();
-        mapping = BCOSchedularInstance.run();
+        BCOSchedulerInstance = new BCO(); // Adjust based on your BCO class
+        mapping = BCOSchedulerInstance.run(); // Adjust based on your BCO class method to execute BCO
 
         try {
+            // Same steps to create Datacenters, Broker, VMs, and Cloudlets
             int num_user = 1;   // number of grid users
             Calendar calendar = Calendar.getInstance();
             boolean trace_flag = false;  // mean trace events
@@ -109,12 +110,13 @@ public class BCO_Scheduler {
             for (int i = 0; i < mapping.length; i++)
                 mapping[i] = hm.containsKey((int) mapping[i]) ? hm.get((int) mapping[i]) : mapping[i];
 
+
             broker.submitVmList(vmList);
             broker.setMapping(mapping);
             broker.submitCloudletList(cloudletList);
 
+            // Same steps for simulation
 
-            // Fifth step: Starts the simulation
             CloudSim.startSimulation();
 
             List<Cloudlet> newList = broker.getCloudletReceivedList();
@@ -134,11 +136,6 @@ public class BCO_Scheduler {
         return new BCODatacenterBroker(name);
     }
 
-    /**
-     * Prints the Cloudlet objects
-     *
-     * @param list list of Cloudlets
-     */
     private static void printCloudletList(List<Cloudlet> list) {
         int size = list.size();
         Cloudlet cloudlet;
@@ -171,6 +168,6 @@ public class BCO_Scheduler {
             mxFinishTime = Math.max(mxFinishTime, cloudlet.getFinishTime());
         }
         Log.printLine(mxFinishTime);
-        BCOSchedularInstance.printBestFitness();
+        BCOSchedulerInstance.printBestFitness();
     }
 }

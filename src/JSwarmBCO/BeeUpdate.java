@@ -1,17 +1,28 @@
 package JSwarmBCO;
 
+import net.sourceforge.jswarm_pso.Particle;
+import net.sourceforge.jswarm_pso.Swarm;
+
 public abstract class BeeUpdate {
 
-    public BeeUpdate(Bee bee) {
+    public BeeUpdate(Bee sampleBee) {
+        this.sampleBee = sampleBee;
     }
 
-    public void begin(BeeSwarm swarm) {
+    protected Bee sampleBee;
+
+    /**
+     * This method is called at the begining of each iteration
+     * Initialize random vectors use for local and global updates (rlocal[] and rother[])
+     */
+    public void begin(Colony colony) {
     }
 
-    public void end(BeeSwarm swarm) {
+    /** This method is called at the end of each iteration */
+    public void end(Colony colony) {
     }
 
-    public abstract void update(BeeSwarm swarm, Bee bee);
+    /** Update bee's position */
+    public abstract void update(Colony colony, Bee bee);
 
 }
-

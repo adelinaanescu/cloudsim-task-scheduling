@@ -9,9 +9,10 @@ import org.cloudbus.cloudsim.lists.VmList;
 import java.util.List;
 
 public class BCODatacenterBroker extends DatacenterBroker {
+
     private double[] mapping;
 
-    public BCODatacenterBroker(String name) throws Exception {
+    BCODatacenterBroker(String name) throws Exception {
         super(name);
     }
 
@@ -30,17 +31,18 @@ public class BCODatacenterBroker extends DatacenterBroker {
     @Override
     protected void submitCloudlets() {
         List<Cloudlet> tasks = assignCloudletsToVms(getCloudletList());
-        int vmIndex = 0;
         for (Cloudlet cloudlet : tasks) {
             Vm vm;
             // if user didn't bind this cloudlet and it has not been executed yet
             if (cloudlet.getVmId() == -1) {
-                vm = getVmsCreatedList().get(vmIndex);
+                Log.printLine(CloudSim.clock() + ": " + getName() + ": No VM assigned for cloudlet "
+                        + cloudlet.getCloudletId() + ", skipping this cloudlet");
+                continue;
             } else { // submit to the specific vm
                 vm = VmList.getById(getVmsCreatedList(), cloudlet.getVmId());
                 if (vm == null) { // vm was not created
                     Log.printLine(CloudSim.clock() + ": " + getName() + ": Postponing execution of cloudlet "
-                            + cloudlet.getCloudletId() + ": bount VM not available");
+                            + cloudlet.getCloudletId() + ": bound VM not available");
                     continue;
                 }
             }
@@ -50,7 +52,6 @@ public class BCODatacenterBroker extends DatacenterBroker {
             cloudlet.setVmId(vm.getId());
             sendNow(getVmsToDatacentersMap().get(vm.getId()), CloudSimTags.CLOUDLET_SUBMIT, cloudlet);
             cloudletsSubmitted++;
-            vmIndex = (vmIndex + 1) % getVmsCreatedList().size();
             getCloudletSubmittedList().add(cloudlet);
         }
     }

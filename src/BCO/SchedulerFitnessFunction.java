@@ -7,8 +7,8 @@ import utils.GenerateMatrices;
 public class SchedulerFitnessFunction extends FitnessFunction {
     private static double[][] execMatrix, commMatrix;
 
-    SchedulerFitnessFunction() {
-        super(false);
+    public SchedulerFitnessFunction(boolean maximize) {
+        super(maximize);
         commMatrix = GenerateMatrices.getCommMatrix();
         execMatrix = GenerateMatrices.getExecMatrix();
     }
@@ -17,7 +17,6 @@ public class SchedulerFitnessFunction extends FitnessFunction {
     public double evaluate(double[] position) {
         double alpha = 0.3;
         return alpha * calcTotalTime(position) + (1 - alpha) * calcMakespan(position);
-//        return calcMakespan(position);
     }
 
     private double calcTotalTime(double[] position) {
@@ -41,39 +40,4 @@ public class SchedulerFitnessFunction extends FitnessFunction {
         }
         return makespan;
     }
-
-    public double evaluateBee(int index, double[] position) {
-        double alpha = 0.3;
-        return alpha * calcTotalTimeBee(index, position) + (1 - alpha) * calcMakespanBee(index, position);
-//        return calcMakespanBee(index, position);
-    }
-
-    private double calcTotalTimeBee(int index, double[] position) {
-        double totalCost = 0;
-        for (int i = 0; i < Constants.NO_OF_TASKS; i++) {
-            int dcId = (int) position[i];
-            if (dcId == index) {
-                totalCost += execMatrix[i][dcId];
-            } else {
-                totalCost += commMatrix[i][dcId];
-            }
-        }
-        return totalCost;
-    }
-
-    public double calcMakespanBee(int index, double[] position) {
-        double makespan = 0;
-        double dcWorkingTime = 0;
-
-        for (int i = 0; i < Constants.NO_OF_TASKS; i++) {
-            int dcId = (int) position[i];
-            if(dcId == index) {
-                dcWorkingTime += execMatrix[i][dcId];
-            } else {
-                dcWorkingTime += commMatrix[i][dcId];
-            }
-            makespan = Math.max(makespan, dcWorkingTime);
-        }
-        return makespan;
-    }
-}
+  }
