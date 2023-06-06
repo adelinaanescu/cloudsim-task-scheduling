@@ -2,6 +2,7 @@ package BCO;
 
 import JSwarmBCO.Bee;
 import utils.Constants;
+import utils.Role;
 
 import java.util.Random;
 
@@ -9,12 +10,12 @@ public class SchedulerBee extends Bee {
     public SchedulerBee() {
         super(Constants.NO_OF_TASKS);
         double[] position = new double[Constants.NO_OF_TASKS];
-
         for (int i = 0; i < Constants.NO_OF_TASKS; i++) {
             Random randObj = new Random();
             position[i] = randObj.nextInt(Constants.NO_OF_DATA_CENTERS);
         }
         setPosition(position);
+        setRole(Role.EMPLOYED); // Initialized with a default role, can be updated later
     }
 
     @Override
@@ -31,6 +32,7 @@ public class SchedulerBee extends Bee {
         newPosition[randomDimension] = Math.min(newPosition[randomDimension], maxPosition);
         return newPosition;
     }
+
     @Override
     public double[] exploreNeighborhood(double minPosition, double maxPosition) {
         double[] newPosition = new double[getPosition().length];
@@ -44,8 +46,6 @@ public class SchedulerBee extends Bee {
         fitness = -1;
         return newPosition;
     }
-
-
     @Override
     public String toString() {
         String output = "";
@@ -54,14 +54,15 @@ public class SchedulerBee extends Bee {
             int no_of_tasks = 0;
             for (int j = 0; j < Constants.NO_OF_TASKS; j++) {
                 if (i == (int) getPosition()[j]) {
-                    tasks += (tasks.isEmpty() ? "" : " ") + j;
+                    tasks += (tasks.isEmpty() ? "" : ", ") + j;
                     ++no_of_tasks;
                 }
             }
-            if (tasks.isEmpty())
-                output += "There is no task associated to Data Center " + i + "\n";
-            else
-                output += "There are " + no_of_tasks + " tasks associated to Data Center " + i + " and they are " + tasks + "\n";
+            if (tasks.isEmpty()) {
+                output += "There are no tasks associated with Data Center " + i + "\n";
+            } else {
+                output += "There are " + no_of_tasks + " tasks associated with Data Center " + i + " and they are " + tasks + "\n";
+            }
         }
         return output;
     }

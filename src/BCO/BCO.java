@@ -1,38 +1,28 @@
 package BCO;
 
+import JSwarmBCO.Colony;
 import utils.Constants;
 
 public class BCO {
-    private static BeeColony colony;
+
+    private static Colony colony;
+    private static SchedulerBee bees[];
     private static SchedulerFitnessFunction ff = new SchedulerFitnessFunction(true);
 
-    // Add a tolerance for the change in best fitness
-    private static final double FITNESS_CHANGE_TOLERANCE = 0.01;
-    // Maximum number of iterations without improvement before stopping
-    private static final int MAX_ITERATIONS_WITHOUT_IMPROVEMENT = 100;
+    public BCO() {
+        initBees();
+    }
 
     public double[] run() {
-        colony = new BeeColony(Constants.POPULATION_SIZE, 0, Constants.NO_OF_DATA_CENTERS - 1, ff);
-        initBees();
+        colony = new Colony(Constants.POPULATION_SIZE, new SchedulerBee(), ff);
 
-        double prevBestFitness = colony.getBestFitness();
-        int iterationsWithoutImprovement = 0;
+        colony.setMinPosition(0.0);
+        colony.setMaxPosition(Constants.NO_OF_DATA_CENTERS - 1.0);
+        colony.setBees(bees);
+        colony.setBeeUpdate(new SchedulerBeeUpdate(new SchedulerBee()));
 
-        for (int i = 0; i < 500; i++) {
-            colony.run(1);
-
-            double currentBestFitness = colony.getBestFitness();
-            if (Math.abs(currentBestFitness - prevBestFitness) < FITNESS_CHANGE_TOLERANCE) {
-                iterationsWithoutImprovement++;
-                if (iterationsWithoutImprovement >= MAX_ITERATIONS_WITHOUT_IMPROVEMENT) {
-                    System.out.println("Stopping early due to lack of improvement in best fitness.");
-                    break;
-                }
-            } else {
-                iterationsWithoutImprovement = 0;
-            }
-            prevBestFitness = currentBestFitness;
-
+        for (int i = 0; i < Constants.NO_OF_ITER; i++) {
+            colony.evolve();
             if (i % 10 == 0) {
                 System.out.printf("Global best at iteration (%d): %f\n", i, colony.getBestFitness());
             }
@@ -41,15 +31,16 @@ public class BCO {
         System.out.println("\nThe best fitness value: " + colony.getBestFitness() + "\nBest makespan: " + ff.calcMakespan(colony.getBestBee().getBestPosition()));
 
         System.out.println("The best solution is: ");
-        SchedulerBee bestBee = colony.getBestBee();
+        SchedulerBee bestBee = (SchedulerBee) colony.getBestBee();
         System.out.println(bestBee.toString());
 
         return colony.getBestPosition();
     }
 
-    private void initBees() {
+    private static void initBees() {
+        bees = new SchedulerBee[Constants.POPULATION_SIZE];
         for (int i = 0; i < Constants.POPULATION_SIZE; ++i)
-            colony.getBees()[i].performRandomSearch(0, Constants.NO_OF_DATA_CENTERS - 1);
+            bees[i] = new SchedulerBee();
     }
 
     public void printBestFitness() {

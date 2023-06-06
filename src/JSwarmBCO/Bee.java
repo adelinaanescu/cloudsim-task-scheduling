@@ -5,6 +5,7 @@ import utils.Role;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
+import java.util.Random;
 
 public abstract class Bee {
 
@@ -19,6 +20,8 @@ public abstract class Bee {
     private double[] position;
 
     private Role role;
+
+    private Random random = new Random();
 
     //Constructors
 
@@ -168,6 +171,25 @@ public abstract class Bee {
             copyPosition2Best();
             bestFitness = fitness;
         }
+    }
+
+
+    public double[] explore() {
+        double[] newPosition = getPosition().clone();
+
+        // Randomly select a dimension to modify
+        int dimensionToModify = random.nextInt(getDimension());
+
+        // Generate a random number in the range of this dimension
+        newPosition[dimensionToModify] = random.nextDouble() * getLimit(dimensionToModify);
+
+        return newPosition;
+    }
+
+    public int getLimit(int i) {
+        // Here you should return the upper limit for the i-th dimension.
+        // For now, let's assume it's a constant.
+        return 5;
     }
 
 
