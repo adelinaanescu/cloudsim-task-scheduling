@@ -17,7 +17,6 @@ public class SchedulerFitnessFunction extends FitnessFunction {
     public double evaluate(double[] position) {
         double alpha = 0.3;
         return alpha * calcTotalTime(position) + (1 - alpha) * calcMakespan(position);
-      //    return 1/calcMakespan(position);
     }
 
     private double calcTotalTime(double[] position) {

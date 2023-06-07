@@ -90,7 +90,7 @@ public class Colony implements Iterable<Bee> {
         for (int i = 0; i < numberOfBees; i++) {
             if (i < numberOfBees * 0.4) {
                 bees[i].setRole(Role.EMPLOYED);
-            } else if (i < numberOfBees * 0.8) {
+            } else if (i < numberOfBees * 0.5) {
                 bees[i].setRole(Role.ONLOOKER);
             } else {
                 bees[i].setRole(Role.SCOUT);

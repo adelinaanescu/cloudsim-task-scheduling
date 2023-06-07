@@ -46,5 +46,10 @@ public class SchedulerBeeUpdate extends BeeUpdate {
             bee.setPosition(newPosition);
             bee.setFitness(newFitness, true);
         }
+        // if the new position is better than the best position found so far, update the best position and fitness
+        if (newFitness < bee.getBestFitness()) {
+            bee.setBestPosition(newPosition);
+            bee.setBestFitness(newFitness);
+        }
     }
 }
