@@ -49,7 +49,7 @@ public class GenerateMatrices {
         do {
             String line = commBufferedReader.readLine();
             for (String num : line.split(" ")) {
-                commMatrix[i][j++] = new Double(num);
+                commMatrix[i][j++] = Double.parseDouble(num);
             }
             ++i;
             j = 0;
@@ -62,7 +62,7 @@ public class GenerateMatrices {
         do {
             String line = execBufferedReader.readLine();
             for (String num : line.split(" ")) {
-                execMatrix[i][j++] = new Double(num);
+                execMatrix[i][j++] = Double.parseDouble(num);
             }
             ++i;
             j = 0;

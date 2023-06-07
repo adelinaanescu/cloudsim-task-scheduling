@@ -7,8 +7,8 @@ import utils.GenerateMatrices;
 public class SchedulerFitnessFunction extends FitnessFunction {
     private static double[][] execMatrix, commMatrix;
 
-    public SchedulerFitnessFunction(boolean maximize) {
-        super(maximize);
+    public SchedulerFitnessFunction() {
+        super(false);
         commMatrix = GenerateMatrices.getCommMatrix();
         execMatrix = GenerateMatrices.getExecMatrix();
     }
@@ -17,6 +17,7 @@ public class SchedulerFitnessFunction extends FitnessFunction {
     public double evaluate(double[] position) {
         double alpha = 0.3;
         return alpha * calcTotalTime(position) + (1 - alpha) * calcMakespan(position);
+      //    return 1/calcMakespan(position);
     }
 
     private double calcTotalTime(double[] position) {

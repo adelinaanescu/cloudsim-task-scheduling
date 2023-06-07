@@ -6,7 +6,7 @@ public abstract class FitnessFunction {
     boolean maximize;
 
     public FitnessFunction() {
-        maximize = true; // Default: Maximize
+        maximize = false; // Default: Maximize
     }
     public FitnessFunction(boolean maximize) {
         this.maximize = maximize;

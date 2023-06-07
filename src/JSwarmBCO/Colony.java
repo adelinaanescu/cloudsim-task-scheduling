@@ -86,11 +86,11 @@ public class Colony implements Iterable<Bee> {
         }
     }
     public void evolve() {
-        // Initialize bees' role (half are EMPLOYED, half are ONLOOKER, 1 is SCOUT)
+        // Initialize bees' role (40% are EMPLOYED, 40% are ONLOOKER, 20% are SCOUT)
         for (int i = 0; i < numberOfBees; i++) {
-            if (i < numberOfBees / 2) {
+            if (i < numberOfBees * 0.4) {
                 bees[i].setRole(Role.EMPLOYED);
-            } else if (i < numberOfBees - 1) {
+            } else if (i < numberOfBees * 0.8) {
                 bees[i].setRole(Role.ONLOOKER);
             } else {
                 bees[i].setRole(Role.SCOUT);

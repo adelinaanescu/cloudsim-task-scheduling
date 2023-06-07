@@ -7,7 +7,7 @@ public class BCO {
 
     private static Colony colony;
     private static SchedulerBee bees[];
-    private static SchedulerFitnessFunction ff = new SchedulerFitnessFunction(true);
+    private static SchedulerFitnessFunction ff = new SchedulerFitnessFunction();
 
     public BCO() {
         initBees();
