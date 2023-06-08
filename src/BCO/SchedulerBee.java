@@ -32,6 +32,16 @@ public class SchedulerBee extends Bee {
         newPosition[randomDimension] = Math.min(newPosition[randomDimension], maxPosition);
         return newPosition;
     }
+//    @Override
+//    public double[] performRandomSearch(double minPosition, double maxPosition) {
+//        Random randObj = new Random();
+//        double[] newPosition = new double[getPosition().length];
+//        for (int i = 0; i < newPosition.length; i++) {
+//            newPosition[i] = randObj.nextInt(Constants.NO_OF_DATA_CENTERS);
+//        }
+//        return newPosition;
+//    }
+
 
     @Override
     public double[] exploreNeighborhood(double minPosition, double maxPosition) {
@@ -46,6 +56,8 @@ public class SchedulerBee extends Bee {
         fitness = -1;
         return newPosition;
     }
+
+
     @Override
     public String toString() {
         String output = "";

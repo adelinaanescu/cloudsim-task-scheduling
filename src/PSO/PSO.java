@@ -22,7 +22,7 @@ public class PSO {
         swarm.setParticles(particles);
         swarm.setParticleUpdate(new SchedulerParticleUpdate(new SchedulerParticle()));
 
-        for (int i = 0; i < 500; i++) {
+        for (int i = 0; i < Constants.NO_OF_ITER; i++) {
             swarm.evolve();
             if (i % 10 == 0) {
                 System.out.printf("Gloabl best at iteration (%d): %f\n", i, swarm.getBestFitness());
