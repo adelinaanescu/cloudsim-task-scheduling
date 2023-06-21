@@ -7,7 +7,7 @@ import utils.Role;
 import utils.Constants;
 
 public class SchedulerBeeUpdate extends BeeUpdate {
-    private static final double epsilon = 0.001;  // small value to prevent division by zero
+
 
     public SchedulerBeeUpdate(Bee sampleBee) {
         super(sampleBee);

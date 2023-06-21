@@ -29,8 +29,8 @@ public class PSO_Scheduler {
 
         //VM Parameters
         long size = 10000; //image size (MB)
-        int ram =512; //vm memory (MB)
-        int mips = 250;
+        int[] ram = {512, 1024, 2048, 4096}; //vm memory (MB)
+        int[] mips = {250, 500, 750, 1000};
         long bw = 1000;
         int pesNumber = 1; //number of cpus
         String vmm = "Xen"; //VMM name
@@ -39,28 +39,32 @@ public class PSO_Scheduler {
         Vm[] vm = new Vm[vms];
 
         for (int i = 0; i < vms; i++) {
-            vm[i] = new Vm(datacenter[i].getId(), userId, mips, pesNumber, ram, bw, size, vmm, new CloudletSchedulerSpaceShared());
+            vm[i] = new Vm(datacenter[i].getId(), userId, mips[i % mips.length], pesNumber, ram[i % ram.length], bw, size, vmm, new CloudletSchedulerSpaceShared());
             list.add(vm[i]);
         }
 
         return list;
     }
 
+
     private static List<Cloudlet> createCloudlet(int userId, int cloudlets, int idShift) {
         LinkedList<Cloudlet> list = new LinkedList<Cloudlet>();
 
         //cloudlet parameters
-        long fileSize = 300;
-        long outputSize = 300;
+        long[] fileSize = {100, 200, 300, 400}; // MB
+        long outputSize = 300; // MB
         int pesNumber = 1;
         UtilizationModel utilizationModel = new UtilizationModelFull();
+
+        long[] length = {500, 1000, 1500, 2000}; // MI (Million Instructions)
 
         Cloudlet[] cloudlet = new Cloudlet[cloudlets];
 
         for (int i = 0; i < cloudlets; i++) {
             int dcId = (int) (mapping[i]);
-            long length = (long) (1e3 * (commMatrix[i][dcId] + execMatrix[i][dcId]));
-            cloudlet[i] = new Cloudlet(idShift + i, length, pesNumber, fileSize, outputSize, utilizationModel, utilizationModel, utilizationModel);
+            long cloudletLength = length[i % length.length] * (long) (1e3 * (commMatrix[i][dcId] + execMatrix[i][dcId]));
+            long cloudletFileSize = fileSize[i % fileSize.length];
+            cloudlet[i] = new Cloudlet(idShift + i, cloudletLength, pesNumber, cloudletFileSize, outputSize, utilizationModel, utilizationModel, utilizationModel);
             cloudlet[i].setUserId(userId);
             list.add(cloudlet[i]);
         }

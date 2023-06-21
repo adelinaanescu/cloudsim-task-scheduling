@@ -16,6 +16,7 @@ public class SchedulerFitnessFunction extends FitnessFunction {
     @Override
     public double evaluate(double[] position) {
         double alpha = 0.3;
+        //return 1/calcMakespan(position);
         return alpha * calcTotalTime(position) + (1 - alpha) * calcMakespan(position);
     }
 
@@ -34,10 +35,10 @@ public class SchedulerFitnessFunction extends FitnessFunction {
 
         for (int i = 0; i < Constants.NO_OF_TASKS; i++) {
             int dcId = (int) position[i];
-            if(dcWorkingTime[dcId] != 0) --dcWorkingTime[dcId];
             dcWorkingTime[dcId] += execMatrix[i][dcId] + commMatrix[i][dcId];
             makespan = Math.max(makespan, dcWorkingTime[dcId]);
         }
         return makespan;
     }
-  }
+
+}

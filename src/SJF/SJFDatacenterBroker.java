@@ -7,6 +7,7 @@ import org.cloudbus.cloudsim.core.CloudSimTags;
 import org.cloudbus.cloudsim.core.SimEvent;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class SJFDatacenterBroker extends DatacenterBroker {
@@ -21,9 +22,12 @@ public class SJFDatacenterBroker extends DatacenterBroker {
     // After that, it sorts the received cloudlet list in ascending order of task length divided by the product of the VM's MIPS (Million Instructions Per Second) and number of PEs (Processing Elements) using a simple bubble sort algorithm.
     // Finally, it sets the sorted list as the received cloudlet list for the broker.
     public void scheduleTaskstoVms() {
+        // Sort the cloudletList by each cloudlet's length (shortest job first)
+        cloudletList.sort(Comparator.comparingLong(Cloudlet::getCloudletLength));
+
         int reqTasks = cloudletList.size();
         int reqVms = vmList.size();
-        Vm vm = vmList.get(0);
+        Vm vm=  vmList.get(0);;
 
         for (int i = 0; i < reqTasks; i++) {
             bindCloudletToVm(i, (i % reqVms));

@@ -10,8 +10,8 @@ public class SchedulerBee extends Bee {
     public SchedulerBee() {
         super(Constants.NO_OF_TASKS);
         double[] position = new double[Constants.NO_OF_TASKS];
+        Random randObj = new Random();
         for (int i = 0; i < Constants.NO_OF_TASKS; i++) {
-            Random randObj = new Random();
             position[i] = randObj.nextInt(Constants.NO_OF_DATA_CENTERS);
         }
         setPosition(position);

@@ -9,8 +9,9 @@ public class GenerateMatrices {
     private File execFile = new File("ExecutionTimeMatrix.txt");
 
     public GenerateMatrices() {
-        commMatrix = new double[Constants.NO_OF_TASKS][Constants.NO_OF_DATA_CENTERS];
-        execMatrix = new double[Constants.NO_OF_TASKS][Constants.NO_OF_DATA_CENTERS];
+        //max 500 tasks and 25 datacenters
+        commMatrix = new double[500][25];
+        execMatrix = new double[500][25];
         try {
             if (commFile.exists() && execFile.exists()) {
                 readCostMatrix();
@@ -27,8 +28,8 @@ public class GenerateMatrices {
         BufferedWriter commBufferedWriter = new BufferedWriter(new FileWriter(commFile));
         BufferedWriter execBufferedWriter = new BufferedWriter(new FileWriter(execFile));
 
-        for (int i = 0; i < Constants.NO_OF_TASKS; i++) {
-            for (int j = 0; j < Constants.NO_OF_DATA_CENTERS; j++) {
+        for (int i = 0; i < 500; i++) {
+            for (int j = 0; j < 25; j++) {
                 commMatrix[i][j] = Math.random() * 600 + 20;
                 execMatrix[i][j] = Math.random() * 500 + 10;
                 commBufferedWriter.write(String.valueOf(commMatrix[i][j]) + ' ');
